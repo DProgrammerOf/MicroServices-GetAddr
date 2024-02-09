@@ -1,0 +1,40 @@
+version: '3'
+
+services:
+  db:
+    image: mongo:latest
+    container_name: db
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: 12345
+      MONGO_INITDB_DATABASE: addresses
+    ports:
+      - 27017:27017
+    volumes:
+      - ./db/data/:/data/db
+      - ./db/mongo-init.sh:/docker-entrypoint-initdb.d/mongo-init.sh:ro
+    networks:
+      - backend
+
+  app:
+    image: node:latest
+    container_name: app
+    working_dir: /app
+    command: /bin/bash -c 'npm install; npm run start:dev'
+    ports:
+      - 3000:3000
+    environment:
+      MONGODB_USERNAME: user_addr
+      MONGODB_PASSWORD: 12345
+      MONGODB_URL: mongodb://user_addr:12345@db:27017/addresses
+      HTTP_PORT: 3000
+    volumes:
+      - ./app/src:/app/src
+      - ./app/package.json:/app/package.json
+    networks:
+      - backend
+
+networks:
+  backend:
+    driver: bridge
