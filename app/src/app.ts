@@ -1,4 +1,4 @@
-import mongodb_config from './config/mongo-db';
+import mongodb_config from './config/mongo-db'
 import { Express } from 'express';
 import mongoose from 'mongoose'
 import locations from './api/routes/locations'
@@ -8,7 +8,7 @@ function setup_mongodb () {
     mongoose.connect(mongodb_config.MONGO_URL)
     .then(() => console.log('Connected to MongoDB!'));
 }
-
+    
 // setup rabbitqm
 function setup_rabbitqm () {
     console.log('Rabbit started!')
@@ -34,4 +34,3 @@ function setup_app (server: Express) {
 }
 
 export default setup_app;
-

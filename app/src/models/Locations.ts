@@ -7,4 +7,4 @@ const locationsScheme = new Schema({
     text: String
 });
 
-export const locations = mongoose.model('locations', locationsScheme);
+export default mongoose.model('locations', locationsScheme);
