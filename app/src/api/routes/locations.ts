@@ -1,7 +1,7 @@
-import express, { Router } from "express"
+import { Router } from "express"
 import locations from '../controllers/locations'
 
-const router = express.Router()
+const router = Router();
 
 router.get('/get/:lat/:lon', async (request, response) => {
     const latitude = Number.parseFloat(request.params.lat.trim())
