@@ -1,10 +1,15 @@
 import mongoose, { Schema } from "mongoose"
 
-const locationsScheme = new Schema({
+export interface LocationObj {
     _id: mongoose.Types.ObjectId,
     latitude: Number,
     longitude: Number,
-    text: String
-});
+    info: String
+}
 
-export default mongoose.model('locations', locationsScheme);
+export default mongoose.model('locations', new Schema<LocationObj>({
+    _id: mongoose.Types.ObjectId,
+    latitude: Number,
+    longitude: Number,
+    info: String
+}))

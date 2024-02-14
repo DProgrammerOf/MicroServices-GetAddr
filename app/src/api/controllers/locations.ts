@@ -1,15 +1,15 @@
-import locations from '../../models/Locations'
+import { ObjectId } from 'bson'
+import locations, { LocationObj } from '../../models/Locations'
 
 interface ResponseLocation {
     success: boolean,
     message: string,
-    address: Object | Object[]
+    address: LocationObj[] | LocationObj
 }
 
 export default {
     all: async ( offset: number, limit: number ): Promise<ResponseLocation> => {
         const address = await locations.find().skip(offset).limit(limit)
-        console.log('(location) all called')
         return {
             success: true,
             message: '',
@@ -18,7 +18,6 @@ export default {
     },
 
     get: async ( latitude: number, longitude: number ): Promise<ResponseLocation> => {
-        console.log('(location) get called')
         const address = await locations.findOne({latitude, longitude})
         return {
             success: address ? true : false,
@@ -27,33 +26,39 @@ export default {
         }
     },
     
-    store: async ( latitude: number, longitude: number, info: string ): Promise<ResponseLocation> => {
-        const address = await new locations({latitude, longitude, info})
-        console.log('(location) store called')
-        return {
-            success: true,
-            message: '',
-            address
+    store: async ( id: ObjectId | null, latitude: number, longitude: number, info: string ): Promise<ResponseLocation> => {
+        const new_location = id ? {_id: id, latitude, longitude, info} : {latitude, longitude, info}
+        try {
+            const address = (await (new locations(new_location)).save())
+            return {
+                success: true,
+                message: '',
+                address
+            }
+        } catch (error: any) {
+            return {
+                success: false,
+                message: '',
+                address: null
+            }
         }
     },
 
-    update: async ( id: string, info: string ): Promise<ResponseLocation> => {
-        const address = await locations.findByIdAndUpdate(id, {info})
-        console.log('(location) update called')
+    update: async ( id: string, data: Object ): Promise<ResponseLocation> => {
+        const address_updated = await locations.findByIdAndUpdate(new ObjectId(id), data, {returnDocument:'after'})
         return {
-            success: true,
+            success: address_updated ? true : false,
             message: '',
-            address
+            address: address_updated
         }
     },
 
-    delete: async ( object_id: string ): Promise<ResponseLocation> => {
-        const status = await locations.findByIdAndDelete(object_id)
-        console.log('(location) delete called')
+    delete: async ( id: string ): Promise<ResponseLocation> => {
+        const status = await locations.findByIdAndDelete(id)
         return {
             success: true,
             message: '',
-            address: status
+            address: null
         }
     }
 }

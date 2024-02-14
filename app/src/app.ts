@@ -1,8 +1,9 @@
-import express from 'express';
+import express from 'express'
 import locations from './api/routes/locations'
 
 // Microservice start
-const app = express();
+const app = express()
+app.use(express.json())
 
 // Routes
 app.use('/location', locations)
