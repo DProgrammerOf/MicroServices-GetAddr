@@ -21,7 +21,7 @@ describe('LocationsService Testing', () => {
     let location_obj = {
         id: new ObjectId('45c631380a6078ce27c7692f'),
         lat: '-27.1289',
-        lon: '-48.606',
+        lon: '-48.6093',
         info: 'Rua 240, 478 - Andorinha, Itapema - SC, 88220-000'
     };
     // to test update

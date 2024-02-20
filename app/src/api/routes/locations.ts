@@ -82,4 +82,6 @@ router.post('/delete', async (request, response) => {
     )
 })
 
+router.use((request, response) => response.status(404).json({message:'route invalid'}))
+
 export default router;
